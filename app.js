@@ -2,25 +2,39 @@
 const express =require('express');
 
 //creation  app express
-const app=express();
+const app = express();
+
+// on importe le router
+const userRoutes = require('./routes/user');
+const ficheUserRoutes = require('./routes/ficheuser');
+const sauceRoutes = require('./routes/sauce');
+
 
 //import body-parser
 const bodyParser = require('body-parser');
+
+
 // ---------connection BD-----------
 //import .dotenv
-const dotenv = require('dotenv');
-const result = dotenv.config();
+// const dotenv = require('dotenv');
+// const result = dotenv.config();
 
 // import db
 const mongoose = require("mongoose");
+
 mongoose.set('strictQuery', true);// delete message terminal
 
-mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.mongodb.net/?retryWrites=true&w=majority`,
+// mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.mongodb.net/?retryWrites=true&w=majority`,
+//   { useNewUrlParser: true,
+//     useUnifiedTopology: true })
+//   .then(() => console.log('Connexion à MongoDB réussie !'))
+//   .catch(() => console.log('Connexion à MongoDB échouée !'));
+
+mongoose.connect('mongodb+srv://Anais15:AnaisPhilo1512@cluster0.ban0efq.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
-
 
 
 
@@ -32,23 +46,19 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // transform req body in json
 app.use(bodyParser.json());
 
+//Authorization routes
+ app.use('/api/auth', userRoutes);
 
-//middleware route(général)
-app.use((req,res,next)=>{
 
-console.log("bienvenue dans Express");
-next();
+// test fiche
+app.use('/api/fiche_user', ficheUserRoutes);
 
-});
-
-  app.use((req,res,next)=>{
-
-    res.status(201).json({message: "je suis dans le status 2 "});
-
-    });
+// sauce routes
+app.use('/api/sauces',sauceRoutes);
 
 
 // export app
