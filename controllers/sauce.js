@@ -2,7 +2,7 @@
 const Sauce = require('../models/SauceMod');
 
 
-// createSauce POST
+// createSauce POST------------------------------
 exports.createSauce = (req, res, next) => {
 
   console.log(req.body);
@@ -18,10 +18,43 @@ exports.createSauce = (req, res, next) => {
 
 };
 
+// Update -----------------------------
+
+exports.modifySauce = (req, res, next) => {
+console.log("route modify");
+console.log({_id: req.params.id});
+console.log(req.body);
 
 
+const sauceObj= req.file ? {
+  //...JSON.parse(req.body.sauce),
+  //imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+} : { ...req.body };
 
-//getOne id
+Sauce.updateOne({ _id: req.params.id}, { ...sauceObj, _id: req.params.id})
+.then(() => res.status(200).json({message : 'Objet modifié!'}))
+.catch(error => res.status(401).json({ error }));
+
+
+};
+
+
+// delete----------------------------------------------------
+exports.deleteSauce = (req, res, next) => {
+
+  Sauce.findOne({ _id: req.params.id})
+   .then(sauce =>{
+   // const filename = sauce.imageUrl.split('/images/')[1];
+   // fs.unlink(`images/${filename}`, () => {
+        Sauce.deleteOne({_id: req.params.id})
+            .then(() => { res.status(200).json({message: 'Objet supprimé !'})})
+            .catch(error => res.status(401).json({ error }));
+      });
+
+
+};
+
+//getOne id------------------------------------------
 exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({_id: req.params.id})
   .then(
