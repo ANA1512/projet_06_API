@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 // Connection attempts limited
 const  limiter  =  rateLimit ( {
 	windowMs : 60  *  60  *  1000 ,
-	max : 10,
+	max : 100,
 	message : " Merci de patienter une heure avant de vos reconnecter" ,
   standardHeaders : true ,
 	legacyHeaders : false ,
