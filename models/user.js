@@ -1,6 +1,8 @@
 // import moogose
 const mongoose = require("mongoose");
 
+const uniqueValidator = require('mongoose-unique-validator');
+
 
 // model user to save in BD
 
@@ -10,7 +12,6 @@ const userSchema = mongoose.Schema({
 });
 
 
+userSchema.plugin(uniqueValidator);
 
-
-
-module.exports = mongoose.model('user',userSchema)
+module.exports = mongoose.model('User',userSchema)
